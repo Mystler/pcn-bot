@@ -18,10 +18,11 @@ Make sure to copy the `config.sample.json` file to `config.json` and enter the p
 
 Then, just run:
 
-```
-npm ci
-npm run build
-npm run start
+```sh
+npm ci # To get the dependencies
+npm run build # To build the Typescript sources into JS files in dist/
+npm run register # To register the latest set of slash commands if they changed
+npm run start # To run the bot
 ```
 
 The DB is a simple JSON file in `carriers.json`.

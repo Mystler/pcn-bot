@@ -1,0 +1,6 @@
+dist/
+node_modules/
+dv12/
+
+config.json
+carriers.json

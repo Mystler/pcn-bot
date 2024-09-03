@@ -1,0 +1,5 @@
+{
+  "token": "your_discord_token",
+  "client_id": "your_discord_app_id",
+  "announce_channel": "channel_id"
+}

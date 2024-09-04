@@ -18,8 +18,11 @@ export const pcnDeleteCommand: Command = {
     .setContexts([InteractionContextType.Guild]),
   execute: async (interaction: ChatInputCommandInteraction) => {
     const callsign = interaction.options.getString("callsign").toUpperCase();
-    removeCarrier((element) => element.Callsign === callsign);
-    saveCache();
-    await interaction.reply(`Removed carrier information for ${callsign}.`);
+    if (removeCarrier((x) => x.Callsign === callsign)) {
+      saveCache();
+      await interaction.reply(`Removed carrier information for ${callsign}.`);
+    } else {
+      await interaction.reply(`ERROR: No carrier found for callsign ${callsign}!`);
+    }
   },
 };

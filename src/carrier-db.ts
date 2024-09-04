@@ -31,6 +31,7 @@ export function saveCache(): void {
 
 /**
  * Add a new carrier and remove the existing one if the discord ID already has one.
+ * @param carrier - Carrier object
  */
 export function addCarrier(carrier: Carrier): void {
   CarrierDB = CarrierDB.filter((element) => element.DiscordID !== carrier.DiscordID);
@@ -38,8 +39,12 @@ export function addCarrier(carrier: Carrier): void {
 }
 
 /**
- * Remove carriers matching the supplied filter function
+ * Remove carriers matching the supplied filter function.
+ * @param fitlerFunc - The function that determines which carriers should be removed.
+ * @returns true if anything changed.
  */
-export function removeCarrier(filterFunc: (carrier: Carrier) => boolean): void {
+export function removeCarrier(filterFunc: (carrier: Carrier) => boolean): boolean {
+  const before = CarrierDB.length;
   CarrierDB = CarrierDB.filter((carrier) => !filterFunc(carrier));
+  return CarrierDB.length !== before;
 }

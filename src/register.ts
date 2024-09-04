@@ -1,7 +1,8 @@
 import config from "../config.json";
 import { REST, Routes } from "discord.js";
-import { Commands } from "./commands";
+import { Commands, setupCommands } from "./commands";
 
+setupCommands();
 const commands = Commands.map((x) => x.data.toJSON());
 
 const rest = new REST().setToken(config.token);

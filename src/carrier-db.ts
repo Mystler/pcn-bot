@@ -43,5 +43,3 @@ export function addCarrier(carrier: Carrier): void {
 export function removeCarrier(filterFunc: (carrier: Carrier) => boolean): void {
   CarrierDB = CarrierDB.filter((carrier) => !filterFunc(carrier));
 }
-
-export default { loadCache, saveCache, addCarrier, removeCarrier, CarrierDB };

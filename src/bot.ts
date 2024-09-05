@@ -32,10 +32,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 });
 
-export function announce(msg: string) {
+export async function announce(msg: string) {
   const channel = client.channels.cache.get(config.announce_channel) as TextChannel;
   const embed = new EmbedBuilder().setColor(14079702).setTitle("Prismatic Carrier Network").setDescription(msg);
-  channel.send({
+  await channel.send({
     embeds: [embed],
   });
 }

@@ -7,6 +7,12 @@ interface Carrier {
   Name: string;
   Location: string;
   CarrierID?: number;
+  Services?: string[];
+  Market?: EDDNCommodity[];
+  Bartender?: EDDNFCMaterial[];
+  LastUpdate?: string;
+  LastMarketUpdate?: string;
+  LastBartenderUpdate?: string;
 }
 
 export let CarrierDB: Carrier[] = [];

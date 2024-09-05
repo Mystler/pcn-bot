@@ -63,7 +63,7 @@ export const pcnCommand: Command = {
       saveCache();
       await interaction.reply(`Removed carrier information for ${interaction.user.displayName}.`);
     } else if (command === "list") {
-      const lines = CarrierDB.map((x) => `${x.Name} ${x.Callsign} of <@${x.DiscordID}> in ${x.Location}`).sort();
+      const lines = CarrierDB.map((x) => `- ${x.Name} ${x.Callsign} of <@${x.DiscordID}> in ${x.Location}`).sort();
       const embed = new EmbedBuilder()
         .setColor(14079702)
         .setTitle("Prismatic Carrier Network")

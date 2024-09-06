@@ -1,7 +1,7 @@
 import { Subscriber } from "zeromq";
 import { inflateSync } from "zlib";
 import { announce } from "./bot";
-import { CarrierDB, saveCache } from "./carrier-db";
+import { findCarrierByCallsign, saveCache } from "./carrier-db";
 
 export async function runEDDNListener() {
   const sock = new Subscriber();
@@ -10,12 +10,13 @@ export async function runEDDNListener() {
   console.log("Worker connected to EDDN.");
 
   for await (const [msg] of sock) {
+    if (!msg) continue;
     const eddn: EDDNMessage = JSON.parse(inflateSync(msg).toString());
     if (!eddn.header.gameversion?.startsWith("4")) continue;
     if (eddn.$schemaRef === "https://eddn.edcd.io/schemas/journal/1") {
       // Regular journal event for carrier location tracking
       const data = eddn.message as EDDNJournalMessage;
-      const carrier = CarrierDB.find((element) => element.Callsign === data.StationName);
+      const carrier = findCarrierByCallsign(data.StationName);
       if (carrier) {
         if (carrier.Location !== data.StarSystem) {
           // System changed, announce jump asynchronously.
@@ -32,7 +33,7 @@ export async function runEDDNListener() {
     } else if (eddn.$schemaRef === "https://eddn.edcd.io/schemas/commodity/3") {
       // Commodity schema for market tracking
       const data = eddn.message as EDDNCommodityMessage;
-      const carrier = CarrierDB.find((element) => element.Callsign === data.stationName);
+      const carrier = findCarrierByCallsign(data.stationName);
       if (carrier) {
         carrier.Market = data.commodities;
         carrier.LastMarketUpdate = data.timestamp;
@@ -41,7 +42,7 @@ export async function runEDDNListener() {
     } else if (eddn.$schemaRef === "https://eddn.edcd.io/schemas/fcmaterials_journal/1") {
       // FCMaterials schema for bartender tracking
       const data = eddn.message as EDDNFCMaterialsMessage;
-      const carrier = CarrierDB.find((element) => element.Callsign === data.CarrierID);
+      const carrier = findCarrierByCallsign(data.CarrierID);
       if (carrier) {
         carrier.Bartender = data.Items;
         carrier.LastBartenderUpdate = data.timestamp;

@@ -4,7 +4,7 @@ import {
   InteractionContextType,
   ChatInputCommandInteraction,
 } from "discord.js";
-import { CarrierDB, saveCache } from "../carrier-db";
+import { findCarrierByCallsign, saveCache } from "../carrier-db";
 import { Command } from "../commands";
 
 export const pcnMoveCommand: Command = {
@@ -20,9 +20,9 @@ export const pcnMoveCommand: Command = {
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setContexts([InteractionContextType.Guild]),
   execute: async (interaction: ChatInputCommandInteraction) => {
-    const callsign = interaction.options.getString("callsign").toUpperCase();
-    const location = interaction.options.getString("location").toUpperCase();
-    const carrier = CarrierDB.find((x) => x.Callsign === callsign);
+    const callsign = interaction.options.getString("callsign")!.toUpperCase();
+    const location = interaction.options.getString("location")!.toUpperCase();
+    const carrier = findCarrierByCallsign(callsign);
     if (carrier) {
       carrier.Location = location;
       saveCache();

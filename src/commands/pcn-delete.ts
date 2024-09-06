@@ -17,7 +17,7 @@ export const pcnDeleteCommand: Command = {
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setContexts([InteractionContextType.Guild]),
   execute: async (interaction: ChatInputCommandInteraction) => {
-    const callsign = interaction.options.getString("callsign").toUpperCase();
+    const callsign = interaction.options.getString("callsign")!.toUpperCase();
     if (removeCarrier((x) => x.Callsign === callsign)) {
       saveCache();
       await interaction.reply(`Removed carrier information for ${callsign}.`);

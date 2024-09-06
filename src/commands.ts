@@ -10,7 +10,7 @@ import { pcnMoveCommand } from "./commands/pcn-move";
  */
 export interface Command {
   data: SharedSlashCommand;
-  execute: (interaction: ChatInputCommandInteraction) => void;
+  execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
 }
 
 /**

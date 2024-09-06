@@ -1,7 +1,10 @@
 import { EmbedBuilder, User } from "discord.js";
 import fs from "node:fs";
 import Templates from "./templates";
-import { capitalize, stripVarName } from "./helpers";
+import { stripVarName } from "./helpers";
+import Commodities from "../data/commodity.json";
+import MicroResources from "../data/microresources.json";
+import Services from "../data/services.json";
 
 // Hardcoded DB file
 const CacheFile = "carriers.json";
@@ -22,6 +25,13 @@ interface Carrier {
 }
 
 let CarrierDB: Carrier[] = [];
+
+export enum MarketOperations {
+  Selling,
+  Buying,
+  SellingMaterials,
+  BuyingMaterials,
+}
 
 /**
  * Load the CarrierDB from the cache file.
@@ -79,38 +89,26 @@ export function findCarrierByUser(user: User): Carrier | undefined {
   return CarrierDB.find((x) => x.DiscordID === user.id);
 }
 
-// Translate services into proper names
-const ServiceMap: Record<string, string> = {
-  refuel: "Refuel",
-  repair: "Repair",
-  rearm: "Restock",
-  shipyard: "Shipyard",
-  outfitting: "Outfitting",
-  exploration: "Universal Cartographics",
-  voucherredemption: "Redemption Office",
-  bartender: "Bartender",
-  vistagenomics: "Vista Genomics",
-  pioneersupplies: "Pioneer Supplies",
-  blackmarket: "Secure Warehouse",
-};
-
 /**
  * Create a list of strings describing our whitelisted services
  * @param Carrier
- * @returns Array of known services
+ * @returns Array of known services, whitelisted in data/services.json
  */
 function getCarrierServices(carrier: Carrier): string[] {
   if (!carrier.Services) return [];
-  return carrier.Services.map((x) => ServiceMap[x])
+  return carrier.Services.map((x) => Services[x as keyof typeof Services])
     .filter((x) => x)
-    .sort() as string[];
+    .sort();
 }
 
-export enum MarketOperations {
-  Selling,
-  Buying,
-  SellingMaterials,
-  BuyingMaterials,
+function commodityName(name: string): string {
+  name = name.toLowerCase();
+  return Commodities[name as keyof typeof Commodities] ?? name;
+}
+
+function fcMatName(name: string): string {
+  name = stripVarName(name.toLowerCase());
+  return MicroResources[name as keyof typeof MicroResources] ?? name;
 }
 
 /**
@@ -125,22 +123,22 @@ function getCarrierMarketInfo(carrier: Carrier, type: MarketOperations): string[
       if (!carrier.Market) return [];
       return carrier.Market.filter((x) => x.stock > 0 && x.buyPrice > 0)
         .sort((a, b) => (a > b ? 1 : b > a ? -1 : 0))
-        .map((x) => `${x.stock} ${capitalize(x.name)} for ${x.buyPrice.toLocaleString("en-US")} cr/t`);
+        .map((x) => `${x.stock} ${commodityName(x.name)} for ${x.buyPrice.toLocaleString("en-US")} cr/t`);
     case MarketOperations.Buying:
       if (!carrier.Market) return [];
       return carrier.Market.filter((x) => x.demand > 0 && x.sellPrice > 0)
         .sort((a, b) => (a > b ? 1 : b > a ? -1 : 0))
-        .map((x) => `${x.demand} ${capitalize(x.name)} for ${x.sellPrice.toLocaleString("en-US")} cr/t`);
+        .map((x) => `${x.demand} ${commodityName(x.name)} for ${x.sellPrice.toLocaleString("en-US")} cr/t`);
     case MarketOperations.SellingMaterials:
       if (!carrier.Bartender) return [];
       return carrier.Bartender.filter((x) => x.Stock > 0 && x.Price > 0)
         .sort((a, b) => (a > b ? 1 : b > a ? -1 : 0))
-        .map((x) => `${x.Stock} ${capitalize(stripVarName(x.Name))}`);
+        .map((x) => `${x.Stock} ${fcMatName(x.Name)}`);
     case MarketOperations.BuyingMaterials:
       if (!carrier.Bartender) return [];
       return carrier.Bartender.filter((x) => x.Demand > 0 && x.Price > 0)
         .sort((a, b) => (a > b ? 1 : b > a ? -1 : 0))
-        .map((x) => `${x.Demand} ${capitalize(stripVarName(x.Name))}`);
+        .map((x) => `${x.Demand} ${fcMatName(x.Name)}`);
   }
 }
 
@@ -182,13 +180,12 @@ function getAllMarketInfo(type: MarketOperations): Record<string, string[]> {
     const carrierStr = `${carrier.Name} ${carrier.Callsign}`;
     if (type === MarketOperations.Selling || type === MarketOperations.Buying) {
       if (!carrier.Market) continue;
-
       for (const item of carrier.Market) {
         // Filter wrong type of order
         if (type === MarketOperations.Selling && (!item.stock || !item.buyPrice)) continue;
         if (type === MarketOperations.Buying && (!item.demand || !item.sellPrice)) continue;
         // Add item and carrier to list
-        const name = capitalize(item.name);
+        const name = commodityName(item.name);
         if (results[name]) results[name]?.push(carrierStr);
         else results[name] = [carrierStr];
       }
@@ -199,7 +196,7 @@ function getAllMarketInfo(type: MarketOperations): Record<string, string[]> {
         if (type === MarketOperations.SellingMaterials && (!item.Stock || !item.Price)) continue;
         if (type === MarketOperations.BuyingMaterials && (!item.Demand || !item.Price)) continue;
         // Add item and carrier to list
-        const name = capitalize(stripVarName(item.Name));
+        const name = fcMatName(item.Name);
         if (results[name]) results[name]?.push(carrierStr);
         else results[name] = [carrierStr];
       }

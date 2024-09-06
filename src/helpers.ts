@@ -16,7 +16,8 @@ export function timestampToDiscordTimestamp(timestamp?: string): string {
  * @returns Processed name
  */
 export function stripVarName(name: string): string {
-  return name.slice(1, -6);
+  if (name.startsWith("$")) return name.slice(1, -6);
+  return name;
 }
 
 /**

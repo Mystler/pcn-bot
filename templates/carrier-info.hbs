@@ -1,0 +1,42 @@
+**Owner:** <@{{carrier.DiscordID}}>
+**Location:** [{{carrier.Location}}](https://inara.cz/elite/starsystem/?search={{urlencode carrier.Location}})
+**Last Update:** {{lastUpdate carrier.LastUpdate}}
+
+**Available Services**
+{{#if services}}
+{{join services ", "}}
+{{else}}
+Unknown
+{{/if}}
+
+{{#if selling}}
+**Market is Selling**
+*Last Update: {{lastUpdate carrier.LastMarketUpdate}}*
+{{#each selling}}
+- {{this}}
+{{/each}}
+
+{{/if}}
+{{#if buying}}
+**Market is Buying**
+*Last Update: {{lastUpdate carrier.LastMarketUpdate}}*
+{{#each buying}}
+- {{this}}
+{{/each}}
+
+{{/if}}
+{{#if sellingMats}}
+**Bartender is Selling**
+*Last Update: {{lastUpdate carrier.LastBartenderUpdate}}*
+{{#each sellingMats}}
+- {{this}}
+{{/each}}
+
+{{/if}}
+{{#if buyingMats}}
+**Bartender is Buying**
+*Last Update: {{lastUpdate carrier.LastBartenderUpdate}}*
+{{#each buyingMats}}
+- {{this}}
+{{/each}}
+{{/if}}

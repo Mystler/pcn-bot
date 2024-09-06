@@ -7,6 +7,8 @@ import {
   findCarrierByUser,
   findCarrierByCallsign,
   createCarrierListEmbed,
+  createAllMarketsEmbed,
+  MarketOperations,
 } from "../carrier-db";
 import { Command } from "../commands";
 
@@ -84,15 +86,23 @@ async function getCallsign(interaction: ChatInputCommandInteraction) {
   }
 }
 
+async function market(interaction: ChatInputCommandInteraction) {
+  const type = interaction.options.getInteger("type") as MarketOperations;
+  await interaction.reply({
+    embeds: [createAllMarketsEmbed(type)],
+  });
+}
+
 // Map subcommand names to our function implementations
 const FuncMap: Record<string, (interaction: ChatInputCommandInteraction) => Promise<void>> = {
-  register: register,
-  unregister: unregister,
-  list: list,
+  register,
+  unregister,
+  list,
   "set-name": setName,
   "set-location": setLocation,
   "get-user": getUser,
   "get-callsign": getCallsign,
+  market,
 };
 
 export const pcnCommand: Command = {
@@ -140,6 +150,23 @@ export const pcnCommand: Command = {
         .setName("get-callsign")
         .setDescription("Get the carrier information for a Carrier ID")
         .addStringOption((option) => option.setName("callsign").setDescription("Carrier ID").setRequired(true))
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("market")
+        .setDescription("Get an overview of known buy/sell orders in our carrier network")
+        .addIntegerOption((option) =>
+          option
+            .setName("type")
+            .setDescription("What type of orders are you looking for?")
+            .setRequired(true)
+            .addChoices(
+              { name: "Buying", value: MarketOperations.Buying },
+              { name: "Bartender Buying", value: MarketOperations.BuyingMaterials },
+              { name: "Selling", value: MarketOperations.Selling },
+              { name: "Bartender Selling", value: MarketOperations.SellingMaterials }
+            )
+        )
     ),
   execute: async (interaction: ChatInputCommandInteraction) => {
     // Look up our matching subcommand implementation using FuncMap.

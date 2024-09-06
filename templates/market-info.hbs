@@ -1,0 +1,8 @@
+{{#each services}}
+- {{this.[0]}}
+{{#each this.[1]}}
+  - {{this}}
+{{/each}}
+{{else}}
+No trade offers found!
+{{/each}}

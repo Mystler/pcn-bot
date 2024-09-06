@@ -18,3 +18,10 @@ export function timestampToDiscordTimestamp(timestamp?: string): string {
 export function stripVarName(name: string): string {
   return name.slice(1, -6);
 }
+
+/**
+ * Capitalize the first letter of a string
+ */
+export function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

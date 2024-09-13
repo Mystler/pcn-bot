@@ -12,7 +12,7 @@ const client = new Client({
 });
 
 client.once(Events.ClientReady, (readyClient) => {
-  console.log(`Discord bot logged in as ${readyClient.user.tag}!`);
+  log(`Discord bot logged in as ${readyClient.user.tag}!`);
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -38,6 +38,10 @@ export async function announce(msg: string, title: string = "Prismatic Carrier N
   await channel.send({
     embeds: [embed],
   });
+}
+
+export function log(message: string) {
+  console.log(`${new Date().toLocaleString()}: ${message}`);
 }
 
 runEDDNListener();

@@ -1,16 +1,20 @@
 import { Subscriber } from "zeromq";
 import { inflateSync } from "zlib";
-import { announce } from "./bot";
+import { announce, log } from "./bot";
 import { findCarrierByCallsign, saveCache } from "./carrier-db";
+import { getLastMessage, setLastMessage } from "./eddn-meta";
 
 export async function runEDDNListener() {
   const sock = new Subscriber();
   sock.connect("tcp://eddn.edcd.io:9500");
   sock.subscribe("");
-  console.log("Worker connected to EDDN.");
+  log("Worker connected to EDDN.");
+
+  runTimeoutCatcher();
 
   for await (const [msg] of sock) {
     if (!msg) continue;
+    setLastMessage(new Date());
     const eddn: EDDNMessage = JSON.parse(inflateSync(msg).toString());
     if (!eddn.header.gameversion?.startsWith("4")) continue;
     if (eddn.$schemaRef === "https://eddn.edcd.io/schemas/journal/1") {
@@ -53,4 +57,15 @@ export async function runEDDNListener() {
   }
   console.error("ZMQ runner exited! Exiting bot to schedule restart.");
   process.exit(1);
+}
+
+// Kill the process if we haven't received any data in 5 minutes. Kudos to elitebgs for this failsafe approach.
+async function runTimeoutCatcher() {
+  setInterval(async () => {
+    const now = new Date();
+    if (now.valueOf() - (getLastMessage()?.valueOf() ?? 0) > 300000) {
+      log("No EDDN messages received in 5 minutes. Exiting to schedule restart!");
+      process.exit(1);
+    }
+  }, 10000);
 }

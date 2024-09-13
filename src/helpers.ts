@@ -11,6 +11,18 @@ export function timestampToDiscordTimestamp(timestamp?: string): string {
 }
 
 /**
+ * Convert the Date into a discord output of the format:
+ * date (time ago)
+ * @param Date - Date object
+ * @returns Output for a discord message
+ */
+export function dateToDiscordTimestamp(date?: Date): string {
+  if (!date) return "Unknown";
+  const unixtime = Math.floor(date.getTime() / 1000);
+  return `<t:${unixtime}:D> (<t:${unixtime}:R>)`;
+}
+
+/**
  * Strip the $ and _name; from Elite item names, e.g. $weaponcomponent_name; => weaponcomponent
  * @param name - Raw name
  * @returns Processed name

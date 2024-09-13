@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction, Collection, SharedSlashCommand } from "dis
 import { pcnCommand } from "./commands/pcn";
 import { pcnDeleteCommand } from "./commands/pcn-delete";
 import { pcnMoveCommand } from "./commands/pcn-move";
+import { pcnLastCommand } from "./commands/pcn-last";
 
 /**
  * Structure to represent a slash command.
@@ -30,4 +31,5 @@ export function setupCommands() {
   addCommand(pcnCommand);
   addCommand(pcnDeleteCommand);
   addCommand(pcnMoveCommand);
+  addCommand(pcnLastCommand);
 }

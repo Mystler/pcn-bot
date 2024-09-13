@@ -40,6 +40,14 @@ export async function announce(msg: string, title: string = "Prismatic Carrier N
   });
 }
 
+export async function sendEmbed(embed: EmbedBuilder, message?: string) {
+  const channel = client.channels.cache.get(config.announce_channel) as TextChannel;
+  await channel.send({
+    content: message,
+    embeds: [embed],
+  });
+}
+
 export function log(message: string) {
   console.log(`${new Date().toLocaleString()}: ${message}`);
 }

@@ -1,7 +1,7 @@
 import { Subscriber } from "zeromq";
 import { inflateSync } from "zlib";
-import { announce, log } from "./bot";
-import { findCarrierByCallsign, saveCache } from "./carrier-db";
+import { announce, log, sendEmbed } from "./bot";
+import { createCarrierInfoEmbed, findCarrierByCallsign, saveCache } from "./carrier-db";
 import { getLastMessage, setLastMessage } from "./eddn-meta";
 
 export async function runEDDNListener() {
@@ -40,18 +40,28 @@ export async function runEDDNListener() {
       const data = eddn.message as EDDNCommodityMessage;
       const carrier = findCarrierByCallsign(data.stationName);
       if (carrier) {
+        let updated = false;
+        if (JSON.stringify(carrier.Market) !== JSON.stringify(data.commodities)) {
+          updated = true;
+        }
         carrier.Market = data.commodities;
         carrier.LastMarketUpdate = data.timestamp;
         saveCache();
+        if (updated) sendEmbed(createCarrierInfoEmbed(carrier), "Market Update Detected");
       }
     } else if (eddn.$schemaRef === "https://eddn.edcd.io/schemas/fcmaterials_journal/1") {
       // FCMaterials schema for bartender tracking
       const data = eddn.message as EDDNFCMaterialsMessage;
       const carrier = findCarrierByCallsign(data.CarrierID);
       if (carrier) {
+        let updated = false;
+        if (JSON.stringify(carrier.Bartender) !== JSON.stringify(data.Items)) {
+          updated = true;
+        }
         carrier.Bartender = data.Items;
         carrier.LastBartenderUpdate = data.timestamp;
         saveCache();
+        if (updated) sendEmbed(createCarrierInfoEmbed(carrier), "Bartender Update Detected");
       }
     }
   }

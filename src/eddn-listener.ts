@@ -77,5 +77,5 @@ async function runTimeoutCatcher() {
       log("No EDDN messages received in 5 minutes. Exiting to schedule restart!");
       process.exit(1);
     }
-  }, 10000);
+  }, 300000);
 }

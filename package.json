@@ -12,16 +12,16 @@
   },
   "author": "Mystler",
   "dependencies": {
-    "discord.js": "^14.16.3",
+    "discord.js": "^14.17.3",
     "handlebars": "^4.7.8",
-    "zeromq": "^6.1.2"
+    "zeromq": "^6.3.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.15.0",
-    "@types/node": "^22.10.0",
-    "eslint": "^9.15.0",
-    "globals": "^15.12.0",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.16.0"
+    "@eslint/js": "^9.18.0",
+    "@types/node": "^22.10.7",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
   }
 }

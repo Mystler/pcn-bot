@@ -2,5 +2,7 @@ dist/
 node_modules/
 dv12/
 
+pm2.config.cjs
+
 config.json
 carriers.json

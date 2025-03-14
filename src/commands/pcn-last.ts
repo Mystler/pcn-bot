@@ -4,9 +4,9 @@ import {
   InteractionContextType,
   ChatInputCommandInteraction,
 } from "discord.js";
-import { Command } from "../commands";
-import { dateToDiscordTimestamp } from "../helpers";
-import { getLastMessage } from "../eddn-meta";
+import { type Command } from "../commands.js";
+import { dateToDiscordTimestamp } from "../helpers.js";
+import { getLastMessage } from "../eddn-meta.js";
 
 export const pcnLastCommand: Command = {
   data: new SlashCommandBuilder()

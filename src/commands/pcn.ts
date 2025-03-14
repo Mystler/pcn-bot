@@ -9,8 +9,9 @@ import {
   createCarrierListEmbed,
   createAllMarketsEmbed,
   MarketOperations,
-} from "../carrier-db";
-import { Command } from "../commands";
+  type MarketOperationsType,
+} from "../carrier-db.js";
+import { type Command } from "../commands.js";
 
 async function register(interaction: ChatInputCommandInteraction) {
   const callsign = interaction.options.getString("callsign")!.toUpperCase();
@@ -87,7 +88,7 @@ async function getCallsign(interaction: ChatInputCommandInteraction) {
 }
 
 async function market(interaction: ChatInputCommandInteraction) {
-  const type = interaction.options.getInteger("type") as MarketOperations;
+  const type = interaction.options.getInteger("type") as MarketOperationsType;
   await interaction.reply({
     embeds: [createAllMarketsEmbed(type)],
   });

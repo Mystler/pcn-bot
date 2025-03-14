@@ -7,6 +7,7 @@ A simple Typescript Discord bot for tracking the Prismatic Imperium's carriers.
 - Updates get posted to an announcement channel on Discord.
 
 _Developed for Node version 20 or higher._
+_Uses PNPM._
 
 ## Installation
 
@@ -19,10 +20,10 @@ Make sure to copy the `config.sample.json` file to `config.json` and enter the p
 Then, just run:
 
 ```sh
-npm ci # To get the dependencies
-npm run build # To build the Typescript sources into JS files in dist/
-npm run register # To register the latest set of slash commands if they changed
-npm run start # To run the bot
+pnpm i # To get the dependencies
+pnpm build # To build the Typescript sources into JS files in dist/
+pnpm register # To register the latest set of slash commands if they changed
+pnpm start # To run the bot
 ```
 
 The DB is a simple JSON file in `carriers.json`.

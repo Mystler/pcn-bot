@@ -4,8 +4,8 @@ import {
   InteractionContextType,
   ChatInputCommandInteraction,
 } from "discord.js";
-import { removeCarrier, saveCache } from "../carrier-db";
-import { Command } from "../commands";
+import { removeCarrier, saveCache } from "../carrier-db.js";
+import { type Command } from "../commands.js";
 
 export const pcnDeleteCommand: Command = {
   data: new SlashCommandBuilder()

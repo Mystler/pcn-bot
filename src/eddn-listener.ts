@@ -1,8 +1,8 @@
 import { Subscriber } from "zeromq";
 import { inflateSync } from "zlib";
-import { announce, log, sendEmbed } from "./bot";
-import { createCarrierInfoEmbed, findCarrierByCallsign, saveCache } from "./carrier-db";
-import { getLastMessage, setLastMessage } from "./eddn-meta";
+import { announce, log, sendEmbed } from "./bot.js";
+import { createCarrierInfoEmbed, findCarrierByCallsign, saveCache } from "./carrier-db.js";
+import { getLastMessage, setLastMessage } from "./eddn-meta.js";
 
 export async function runEDDNListener() {
   const sock = new Subscriber();

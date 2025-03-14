@@ -1,5 +1,6 @@
 {
   "name": "prismatic-carrier-network",
+  "type": "module",
   "version": "1.1.0",
   "description": "Discord Bot to announce Fleet Carrier updates via EDDN data",
   "main": "dist/bot.js",
@@ -17,11 +18,16 @@
     "zeromq": "^6.3.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.20.0",
-    "@types/node": "^22.13.4",
-    "eslint": "^9.20.1",
-    "globals": "^15.15.0",
-    "typescript": "^5.7.3",
-    "typescript-eslint": "^8.24.1"
+    "@eslint/js": "^9.22.0",
+    "@types/node": "^22.13.10",
+    "eslint": "^9.22.0",
+    "globals": "^16.0.0",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "zeromq"
+    ]
   }
 }

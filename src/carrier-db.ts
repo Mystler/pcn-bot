@@ -1,10 +1,10 @@
 import { EmbedBuilder, User } from "discord.js";
 import fs from "node:fs";
-import Templates from "./templates";
-import { stripVarName } from "./helpers";
-import Commodities from "../data/commodity.json";
-import MicroResources from "../data/microresources.json";
-import Services from "../data/services.json";
+import Templates from "./templates.js";
+import { stripVarName } from "./helpers.js";
+import Commodities from "../data/commodity.json" with { type: "json" };
+import MicroResources from "../data/microresources.json" with { type: "json" };
+import Services from "../data/services.json" with { type: "json" };
 
 // Hardcoded DB file
 const CacheFile = "carriers.json";
@@ -26,12 +26,13 @@ interface Carrier {
 
 let CarrierDB: Carrier[] = [];
 
-export enum MarketOperations {
-  Selling,
-  Buying,
-  SellingMaterials,
-  BuyingMaterials,
+export const MarketOperations = {
+  Selling: 0,
+  Buying: 1,
+  SellingMaterials: 2,
+  BuyingMaterials: 3,
 }
+export type MarketOperationsType = typeof MarketOperations[keyof typeof MarketOperations];
 
 /**
  * Load the CarrierDB from the cache file.
@@ -116,7 +117,7 @@ function fcMatName(name: string): string {
  * @param Carrier
  * @param type - Order type to check for (perspective of what the carrier does)
  */
-function getCarrierMarketInfo(carrier: Carrier, type: MarketOperations): string[] {
+function getCarrierMarketInfo(carrier: Carrier, type: MarketOperationsType): string[] {
   // demand should come with sellPrice and stock should come with buyPrice
   switch (type) {
     case MarketOperations.Selling:
@@ -140,6 +141,7 @@ function getCarrierMarketInfo(carrier: Carrier, type: MarketOperations): string[
         .sort((a, b) => (a > b ? 1 : b > a ? -1 : 0))
         .map((x) => `${x.Demand} ${fcMatName(x.Name)}`);
   }
+  return [];
 }
 
 /**
@@ -174,7 +176,7 @@ export function createCarrierListEmbed(): EmbedBuilder {
   return new EmbedBuilder().setColor(14079702).setTitle("Prismatic Carrier Network").setDescription(lines.join("\n"));
 }
 
-function getAllMarketInfo(type: MarketOperations): Record<string, string[]> {
+function getAllMarketInfo(type: MarketOperationsType): Record<string, string[]> {
   const results: Record<string, string[]> = {};
   for (const carrier of CarrierDB) {
     const carrierStr = `${carrier.Name} ${carrier.Callsign}`;
@@ -210,7 +212,7 @@ function getAllMarketInfo(type: MarketOperations): Record<string, string[]> {
  * @param type - What is the carrier doing
  * @returns Embed
  */
-export function createAllMarketsEmbed(type: MarketOperations): EmbedBuilder {
+export function createAllMarketsEmbed(type: MarketOperationsType): EmbedBuilder {
   const services = getAllMarketInfo(type);
   const title =
     "Carriers are " +

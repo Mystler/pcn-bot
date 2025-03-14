@@ -9,7 +9,9 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "strict": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true
   },
   "include": ["./src/**/*"]
 }

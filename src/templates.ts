@@ -1,6 +1,6 @@
 import Handlebars from "handlebars";
 import fs from "node:fs";
-import { timestampToDiscordTimestamp } from "./helpers";
+import { timestampToDiscordTimestamp } from "./helpers.js";
 
 Handlebars.registerHelper("urlencode", encodeURIComponent);
 Handlebars.registerHelper("lastUpdate", timestampToDiscordTimestamp);

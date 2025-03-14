@@ -1,8 +1,8 @@
 import { ChatInputCommandInteraction, Collection, SharedSlashCommand } from "discord.js";
-import { pcnCommand } from "./commands/pcn";
-import { pcnDeleteCommand } from "./commands/pcn-delete";
-import { pcnMoveCommand } from "./commands/pcn-move";
-import { pcnLastCommand } from "./commands/pcn-last";
+import { pcnCommand } from "./commands/pcn.js";
+import { pcnDeleteCommand } from "./commands/pcn-delete.js";
+import { pcnMoveCommand } from "./commands/pcn-move.js";
+import { pcnLastCommand } from "./commands/pcn-last.js";
 
 /**
  * Structure to represent a slash command.

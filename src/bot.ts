@@ -1,8 +1,8 @@
-import config from "../config.json";
-import { loadCache } from "./carrier-db";
+import config from "../config.json" with { type: "json" };
+import { loadCache } from "./carrier-db.js";
 import { Client, EmbedBuilder, Events, GatewayIntentBits, TextChannel } from "discord.js";
-import { Commands, setupCommands } from "./commands";
-import { runEDDNListener } from "./eddn-listener";
+import { Commands, setupCommands } from "./commands.js";
+import { runEDDNListener } from "./eddn-listener.js";
 
 loadCache();
 setupCommands();

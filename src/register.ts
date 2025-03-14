@@ -1,6 +1,6 @@
-import config from "../config.json";
+import config from "../config.json" with { type: "json" };
 import { REST, Routes } from "discord.js";
-import { Commands, setupCommands } from "./commands";
+import { Commands, setupCommands } from "./commands.js";
 
 setupCommands();
 const commands = Commands.map((x) => x.data.toJSON());

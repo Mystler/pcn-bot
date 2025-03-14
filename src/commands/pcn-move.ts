@@ -4,8 +4,8 @@ import {
   InteractionContextType,
   ChatInputCommandInteraction,
 } from "discord.js";
-import { findCarrierByCallsign, saveCache } from "../carrier-db";
-import { Command } from "../commands";
+import { findCarrierByCallsign, saveCache } from "../carrier-db.js";
+import { type Command } from "../commands.js";
 
 export const pcnMoveCommand: Command = {
   data: new SlashCommandBuilder()

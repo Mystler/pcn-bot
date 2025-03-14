@@ -12,7 +12,7 @@ export const pcnDeleteCommand: Command = {
     .setName("pcn-delete")
     .setDescription("ADMIN: Delete a cerrier entry by callsign")
     .addStringOption((option) =>
-      option.setName("callsign").setDescription("Callsign of the carrier to remove").setRequired(true)
+      option.setName("callsign").setDescription("Callsign of the carrier to remove").setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setContexts([InteractionContextType.Guild]),

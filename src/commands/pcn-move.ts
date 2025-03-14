@@ -12,10 +12,10 @@ export const pcnMoveCommand: Command = {
     .setName("pcn-move")
     .setDescription("ADMIN: Change a carrier location by callsign")
     .addStringOption((option) =>
-      option.setName("callsign").setDescription("Callsign of the carrier to move").setRequired(true)
+      option.setName("callsign").setDescription("Callsign of the carrier to move").setRequired(true),
     )
     .addStringOption((option) =>
-      option.setName("location").setDescription("New location of the carrier").setRequired(true)
+      option.setName("location").setDescription("New location of the carrier").setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setContexts([InteractionContextType.Guild]),

@@ -31,8 +31,8 @@ export const MarketOperations = {
   Buying: 1,
   SellingMaterials: 2,
   BuyingMaterials: 3,
-}
-export type MarketOperationsType = typeof MarketOperations[keyof typeof MarketOperations];
+};
+export type MarketOperationsType = (typeof MarketOperations)[keyof typeof MarketOperations];
 
 /**
  * Load the CarrierDB from the cache file.
@@ -162,7 +162,7 @@ export function createCarrierInfoEmbed(carrier: Carrier): EmbedBuilder {
         buying: getCarrierMarketInfo(carrier, MarketOperations.Buying),
         sellingMats: getCarrierMarketInfo(carrier, MarketOperations.SellingMaterials),
         buyingMats: getCarrierMarketInfo(carrier, MarketOperations.BuyingMaterials),
-      })
+      }),
     );
 }
 
@@ -226,6 +226,6 @@ export function createAllMarketsEmbed(type: MarketOperationsType): EmbedBuilder 
     .setDescription(
       Templates.MarketInfo({
         services: Object.entries(services).sort((a, b) => (a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0)),
-      })
+      }),
     );
 }

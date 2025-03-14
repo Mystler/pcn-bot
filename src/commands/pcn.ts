@@ -24,7 +24,7 @@ async function register(interaction: ChatInputCommandInteraction) {
   });
   saveCache();
   await interaction.reply(
-    `Registered carrier ${name} for ${interaction.user.displayName}.\nPlease note that updates are only detected from people that visit the carrier and run EDMC, EDDiscovery, or similar software. You should run it yourself if you want to send your own location updates.`
+    `Registered carrier ${name} for ${interaction.user.displayName}.\nPlease note that updates are only detected from people that visit the carrier and run EDMC, EDDiscovery, or similar software. You should run it yourself if you want to send your own location updates.`,
   );
 }
 
@@ -116,11 +116,11 @@ export const pcnCommand: Command = {
         .setName("register")
         .setDescription("Register your carrier")
         .addStringOption((option) =>
-          option.setName("callsign").setDescription("The call sign of your carrier").setRequired(true)
+          option.setName("callsign").setDescription("The call sign of your carrier").setRequired(true),
         )
         .addStringOption((option) =>
-          option.setName("name").setDescription("The name of your carrier").setRequired(true)
-        )
+          option.setName("name").setDescription("The name of your carrier").setRequired(true),
+        ),
     )
     .addSubcommand((subcommand) => subcommand.setName("unregister").setDescription("Remove your carrier"))
     .addSubcommand((subcommand) => subcommand.setName("list").setDescription("List all known carriers"))
@@ -129,28 +129,28 @@ export const pcnCommand: Command = {
         .setName("set-name")
         .setDescription("Update your carrier name")
         .addStringOption((option) =>
-          option.setName("name").setDescription("The name of your carrier").setRequired(true)
-        )
+          option.setName("name").setDescription("The name of your carrier").setRequired(true),
+        ),
     )
     .addSubcommand((subcommand) =>
       subcommand
         .setName("set-location")
         .setDescription("Update your carrier location manually")
         .addStringOption((option) =>
-          option.setName("location").setDescription("The location of your carrier").setRequired(true)
-        )
+          option.setName("location").setDescription("The location of your carrier").setRequired(true),
+        ),
     )
     .addSubcommand((subcommand) =>
       subcommand
         .setName("get-user")
         .setDescription("Get the carrier information for a Discord user")
-        .addUserOption((option) => option.setName("user").setDescription("Discord user").setRequired(true))
+        .addUserOption((option) => option.setName("user").setDescription("Discord user").setRequired(true)),
     )
     .addSubcommand((subcommand) =>
       subcommand
         .setName("get-callsign")
         .setDescription("Get the carrier information for a Carrier ID")
-        .addStringOption((option) => option.setName("callsign").setDescription("Carrier ID").setRequired(true))
+        .addStringOption((option) => option.setName("callsign").setDescription("Carrier ID").setRequired(true)),
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -165,9 +165,9 @@ export const pcnCommand: Command = {
               { name: "Buying", value: MarketOperations.Buying },
               { name: "Bartender Buying", value: MarketOperations.BuyingMaterials },
               { name: "Selling", value: MarketOperations.Selling },
-              { name: "Bartender Selling", value: MarketOperations.SellingMaterials }
-            )
-        )
+              { name: "Bartender Selling", value: MarketOperations.SellingMaterials },
+            ),
+        ),
     ),
   execute: async (interaction: ChatInputCommandInteraction) => {
     // Look up our matching subcommand implementation using FuncMap.

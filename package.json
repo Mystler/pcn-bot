@@ -9,7 +9,8 @@
     "register": "node --enable-source-maps dist/register.js",
     "build": "tsc",
     "clean": "rm -r dist",
-    "lint": "eslint src"
+    "lint": "prettier --check src && eslint src",
+    "format": "prettier --write src"
   },
   "author": "Mystler",
   "dependencies": {
@@ -22,6 +23,7 @@
     "@types/node": "^22.13.10",
     "eslint": "^9.22.0",
     "globals": "^16.0.0",
+    "prettier": "^3.5.3",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1"
   },

@@ -26,7 +26,7 @@ export async function runEDDNListener() {
           // System changed, announce jump asynchronously.
           announce(
             `${carrier.Name} ${carrier.Callsign} of <@${carrier.DiscordID}> has been detected at a new location in **${data.StarSystem}** (was ${carrier.Location}).`,
-            "Jump Detected"
+            "Jump Detected",
           );
         }
         carrier.Location = data.StarSystem;

@@ -4,6 +4,39 @@ import { announce, log, sendEmbed } from "./bot.js";
 import { createCarrierInfoEmbed, findCarrierByCallsign, saveCache } from "./carrier-db.js";
 import { getLastMessage, setLastMessage } from "./eddn-meta.js";
 
+// This tracks the most common game version to filter for. Seed with 5 instances of a default.
+const versionTrack: string[] = Array(5).fill("4.1.3.0");
+let requiredGameVersion = "";
+
+function trackVersion(version: string) {
+  versionTrack.push(version);
+  // Track the last 200 versions for now.
+  if (versionTrack.length > 200) {
+    versionTrack.shift();
+  }
+  const mode = getModeVersion();
+  if (mode !== requiredGameVersion) {
+    log(`Setting expected game version to ${mode}`);
+    requiredGameVersion = mode;
+  }
+}
+
+function getModeVersion() {
+  const frequencyMap: { [index: string]: number } = {};
+  for (const version of versionTrack) {
+    frequencyMap[version] = (frequencyMap[version] || 0) + 1;
+  }
+  let mode = "";
+  let maxCount = 0;
+  for (const [version, count] of Object.entries(frequencyMap)) {
+    if (count > maxCount) {
+      maxCount = count;
+      mode = version;
+    }
+  }
+  return mode;
+}
+
 export async function runEDDNListener() {
   const sock = new Subscriber();
   sock.connect("tcp://eddn.edcd.io:9500");
@@ -16,7 +49,8 @@ export async function runEDDNListener() {
     if (!msg) continue;
     setLastMessage(new Date());
     const eddn: EDDNMessage = JSON.parse(inflateSync(msg).toString());
-    if (!eddn.header.gameversion?.startsWith("4")) continue;
+    if (eddn.header.gameversion) trackVersion(eddn.header.gameversion);
+    if (eddn.header.gameversion !== requiredGameVersion) continue;
     if (eddn.$schemaRef === "https://eddn.edcd.io/schemas/journal/1") {
       // Regular journal event for carrier location tracking
       const data = eddn.message as EDDNJournalMessage;

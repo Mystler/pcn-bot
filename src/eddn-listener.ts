@@ -5,7 +5,7 @@ import { createCarrierInfoEmbed, findCarrierByCallsign, saveCache } from "./carr
 import { getLastMessage, setLastMessage } from "./eddn-meta.js";
 
 // This tracks the most common game version to filter for. Seed with 5 instances of a default.
-const versionTrack: string[] = Array(5).fill("4.1.3.0");
+const versionTrack: string[] = Array(5).fill("4.2.0.0");
 let requiredGameVersion = "";
 
 function trackVersion(version: string) {

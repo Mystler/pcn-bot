@@ -53,11 +53,13 @@ export function saveCache(): void {
 }
 
 /**
- * Add a new carrier and remove the existing one if the discord ID already has one.
+ * Add a new carrier and remove existing if callsign exists on same user.
  * @param carrier - Carrier object
  */
 export function addCarrier(carrier: Carrier): void {
-  CarrierDB = CarrierDB.filter((element) => element.DiscordID !== carrier.DiscordID);
+  CarrierDB = CarrierDB.filter(
+    (element) => element.DiscordID !== carrier.DiscordID || element.Callsign !== carrier.Callsign,
+  );
   CarrierDB.push(carrier);
 }
 
@@ -82,12 +84,12 @@ export function findCarrierByCallsign(callsign?: string): Carrier | undefined {
 }
 
 /**
- * Find a carrier matching an owning Discord user.
+ * Find carriers matching an owning Discord user.
  * @param user - Discord user to check ownership for
  * @returns Carrier object or undefined
  */
-export function findCarrierByUser(user: User): Carrier | undefined {
-  return CarrierDB.find((x) => x.DiscordID === user.id);
+export function findCarriersByUser(user: User): Carrier[] {
+  return CarrierDB.filter((x) => x.DiscordID === user.id);
 }
 
 /**

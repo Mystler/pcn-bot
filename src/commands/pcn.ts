@@ -4,7 +4,7 @@ import {
   saveCache,
   removeCarrier,
   createCarrierInfoEmbed,
-  findCarrierByUser,
+  findCarriersByUser,
   findCarrierByCallsign,
   createCarrierListEmbed,
   createAllMarketsEmbed,
@@ -29,9 +29,13 @@ async function register(interaction: ChatInputCommandInteraction) {
 }
 
 async function unregister(interaction: ChatInputCommandInteraction) {
-  removeCarrier((x) => x.DiscordID === interaction.user.id);
-  saveCache();
-  await interaction.reply(`Removed carrier information for ${interaction.user.displayName}.`);
+  const callsign = interaction.options.getString("callsign")!.toUpperCase();
+  if (removeCarrier((x) => x.DiscordID === interaction.user.id && x.Callsign === callsign)) {
+    saveCache();
+    await interaction.reply(`Removed carrier information for ${callsign} of ${interaction.user.displayName}.`);
+  } else {
+    await interaction.reply(`Error: Found no carrier ${callsign} belonging to ${interaction.user.displayName}.`);
+  }
 }
 
 async function list(interaction: ChatInputCommandInteraction) {
@@ -41,34 +45,36 @@ async function list(interaction: ChatInputCommandInteraction) {
 }
 
 async function setName(interaction: ChatInputCommandInteraction) {
-  const carrier = findCarrierByUser(interaction.user);
+  const callsign = interaction.options.getString("callsign")!.toUpperCase();
+  const carrier = findCarriersByUser(interaction.user).find((x) => x.Callsign === callsign);
   if (carrier) {
     carrier.Name = interaction.options.getString("name")!;
     saveCache();
     await interaction.reply(`Updated carrier name for ${carrier.Callsign} to ${carrier.Name}.`);
   } else {
-    await interaction.reply(`Error: You have no carrier registered to you!`);
+    await interaction.reply(`Error: You have no carrier with callsign ${callsign} registered to you!`);
   }
 }
 
 async function setLocation(interaction: ChatInputCommandInteraction) {
-  const carrier = findCarrierByUser(interaction.user);
+  const callsign = interaction.options.getString("callsign")!.toUpperCase();
+  const carrier = findCarriersByUser(interaction.user).find((x) => x.Callsign === callsign);
   if (carrier) {
     carrier.Location = interaction.options.getString("location")!;
     carrier.LastUpdate = new Date().toISOString();
     saveCache();
     await interaction.reply(`Updated location for ${carrier.Callsign} to ${carrier.Location}.`);
   } else {
-    await interaction.reply(`Error: You have no carrier registered to you!`);
+    await interaction.reply(`Error: You have no carrier with callsign ${callsign} registered to you!`);
   }
 }
 
 async function getUser(interaction: ChatInputCommandInteraction) {
   const user = interaction.options.getUser("user")!;
-  const carrier = findCarrierByUser(user);
-  if (carrier) {
+  const carriers = findCarriersByUser(user);
+  if (carriers.length > 0) {
     await interaction.reply({
-      embeds: [createCarrierInfoEmbed(carrier)],
+      embeds: carriers.map((x) => createCarrierInfoEmbed(x)),
     });
   } else {
     await interaction.reply(`Error: No carrier information found!`);
@@ -122,12 +128,22 @@ export const pcnCommand: Command = {
           option.setName("name").setDescription("The name of your carrier").setRequired(true),
         ),
     )
-    .addSubcommand((subcommand) => subcommand.setName("unregister").setDescription("Remove your carrier"))
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("unregister")
+        .setDescription("Remove your carrier")
+        .addStringOption((option) =>
+          option.setName("callsign").setDescription("The call sign of your carrier").setRequired(true),
+        ),
+    )
     .addSubcommand((subcommand) => subcommand.setName("list").setDescription("List all known carriers"))
     .addSubcommand((subcommand) =>
       subcommand
         .setName("set-name")
         .setDescription("Update your carrier name")
+        .addStringOption((option) =>
+          option.setName("callsign").setDescription("The call sign of your carrier").setRequired(true),
+        )
         .addStringOption((option) =>
           option.setName("name").setDescription("The name of your carrier").setRequired(true),
         ),
@@ -136,6 +152,9 @@ export const pcnCommand: Command = {
       subcommand
         .setName("set-location")
         .setDescription("Update your carrier location manually")
+        .addStringOption((option) =>
+          option.setName("callsign").setDescription("The call sign of your carrier").setRequired(true),
+        )
         .addStringOption((option) =>
           option.setName("location").setDescription("The location of your carrier").setRequired(true),
         ),

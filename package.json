@@ -14,18 +14,18 @@
   },
   "author": "Mystler",
   "dependencies": {
-    "discord.js": "^14.25.1",
-    "handlebars": "^4.7.8",
+    "discord.js": "^14.26.2",
+    "handlebars": "^4.7.9",
     "zeromq": "^6.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^25.5.0",
-    "eslint": "^10.1.0",
+    "@types/node": "^25.5.2",
+    "eslint": "^10.2.0",
     "globals": "^17.4.0",
     "prettier": "^3.8.1",
     "typescript": "^6.0.2",
-    "typescript-eslint": "^8.57.2"
+    "typescript-eslint": "^8.58.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

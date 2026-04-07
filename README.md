@@ -2,7 +2,7 @@
 
 A simple Typescript Discord bot for tracking the Prismatic Imperium's carriers.
 
-- Allows registering one carrier by user through slash commands.
+- Allows registering carriers by user through slash commands.
 - Carriers get tracked by listening to EDDN.
 - Updates get posted to an announcement channel on Discord.
 

@@ -14,17 +14,17 @@
   },
   "author": "Mystler",
   "dependencies": {
-    "discord.js": "^14.26.4",
+    "discord.js": "^14.27.0",
     "handlebars": "^4.7.9",
-    "zeromq": "^6.5.0"
+    "zeromq": "^6.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^25.9.1",
-    "eslint": "^10.4.0",
-    "globals": "^17.6.0",
-    "prettier": "^3.8.3",
+    "@types/node": "^26.4.0",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0",
+    "prettier": "^3.9.6",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.4"
+    "typescript-eslint": "^8.68.0"
   }
 }
